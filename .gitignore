@@ -21,6 +21,7 @@ coverage
 .env.*
 !.env.example
 !.env.*.example
+!.env.production
 
 # Test and tooling output
 playwright-report

@@ -10,6 +10,14 @@ import { useMutation } from '@tanstack/react-query'
 import { Eye, EyeOff, Phone, Home, ShieldCheck, AlertCircle } from 'lucide-react'
 import { BrandMark } from '../../components/layout/BrandMark'
 
+const DEMO_ACCOUNTS = [
+  { role: 'Student', username: 'student', password: 'student' },
+  { role: 'Staff', username: 'staff', password: 'staff' },
+  { role: 'Officer', username: 'officer', password: 'officer' },
+  { role: 'Technician', username: 'technician', password: 'technician' },
+  { role: 'Admin', username: 'superadmin', password: 'superadmin' },
+]
+
 export function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -17,6 +25,7 @@ export function LoginPage() {
   const [rememberDevice, setRememberDevice] = useState(false)
   const login = useAuthStore(state => state.login)
   const navigate = useNavigate()
+  const demoMode = import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true'
 
   const loginMutation = useMutation({
     mutationFn: async () => {
@@ -169,6 +178,25 @@ export function LoginPage() {
               <Card className="bg-white border border-blue-100 shadow-lg rounded-2xl overflow-hidden">
                 <form onSubmit={handleSubmit}>
                   <CardContent className="p-7 space-y-5">
+
+                    {demoMode && (
+                      <section aria-label="Demo accounts" className="rounded-xl border border-blue-200 bg-blue-50/70 p-4">
+                        <p className="text-sm font-bold text-slate-900">Demo access</p>
+                        <p className="mt-1 text-xs leading-5 text-slate-600">Choose a role to fill its sample account. Demo data is not private.</p>
+                        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                          {DEMO_ACCOUNTS.map(account => (
+                            <button
+                              key={account.role}
+                              type="button"
+                              onClick={() => { setUsername(account.username); setPassword(account.password); loginMutation.reset() }}
+                              className="min-h-11 rounded-lg border border-blue-200 bg-white px-3 text-sm font-semibold text-blue-900 transition-colors hover:border-blue-400 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
+                            >
+                              {account.role}
+                            </button>
+                          ))}
+                        </div>
+                      </section>
+                    )}
 
                     {/* Error state */}
                     {loginMutation.isError && (

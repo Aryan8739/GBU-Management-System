@@ -31,3 +31,11 @@ If you are developing a production application, we recommend enabling type-aware
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
 # GBU-Management-System
+
+## Demo deployment
+
+The production build enables MSW demo mode through the checked-in `.env.production` setting. It provides sample login accounts and mock complaint data, so no backend is required for a walkthrough. Choose a role on the login screen to fill its demo account.
+
+The demo accounts are public test identities. Do not use them for real authentication or sensitive data. Replace demo mode with a real API before production use; setting `VITE_DEMO_MODE=false` in the hosting environment disables the mock worker.
+
+Build and deploy the generated `dist` directory. The static host must serve `public/mockServiceWorker.js` from the same origin and rewrite client-side routes such as `/login`, `/staff`, and `/admin` to `index.html`.

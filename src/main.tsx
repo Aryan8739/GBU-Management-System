@@ -4,11 +4,14 @@ import App from './App.tsx'
 import './index.css'
 
 async function enableMocking() {
-  if (!import.meta.env.DEV) {
+  const demoMode = import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true'
+  if (!demoMode) {
     return
   }
   const { worker } = await import('./mocks/browser')
-  return worker.start()
+  return worker.start({
+    serviceWorker: { url: `${import.meta.env.BASE_URL}mockServiceWorker.js` },
+  })
 }
 
 enableMocking().then(() => {
